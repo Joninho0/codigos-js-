@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script type="text/javascript">
+        var a = (prompt("digite seu nome:"));
+        var b = parseFloat(prompt("Digite o valor da nota da b1:"));
+        var c = parseFloat(prompt("Digite o valor da nota da b2:"));
+        var med = (b + c) / 2;
+        //var soma = a + b;
+        if(med <= 10 && med >= 9){
+             alert("Parabéns " + a + " você foi aprovado com a média " + med+ " com conceito A->A+");
+        }  
+        else if(med < 8.9 && med >= 5){
+             alert("Parabéns " + a + " você foi aprovado com a média " + med+ " com conceito C->B");
+        }
+        else {
+                alert("Infelizmente " + a + " você foi reprovado com a média " + med+ " com conceito f->D");
+        }
+    </script>
+</body>
+</html>
