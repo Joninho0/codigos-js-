@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox</title>
+</head>
+<body>
+    <script type="text/javascript">
+        var a = (prompt("digite seu nome:"));
+        var b = parseFloat(prompt("Digite o seu peso:"));
+        var c = parseFloat(prompt("Digite a sua altura:"));
+        var med = (b / (c * c));
+        if (med < 18.5) {
+        alert("Abaixo do peso, seu imc é" + med);
+    } else if (med >= 18.5 && med <= 24.9) {
+        alert("Peso normal, seu imc é" + med);
+    } else if (med >= 25 && med <= 29.9) {
+        alert("Sobrepeso, seu imc é" + med);
+    } else if (med >= 30 && med <= 34.9) {
+        alert("Obesidade grau 1, seu imc é" + med);
+    } else if (med >= 35 && med <= 39.9     ) {
+        alert("Obesidade grau 2, seu imc é" + med);
+    } else {
+        alert("Obesidade grau 3, seu imc é" + med);
+    }
+    </script>
+</body>
+</html>
