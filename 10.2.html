@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+     <script>
+        function jogar() {
+            // Passo 1: Pedir número do jogador
+            var numeroJogador = prompt("Digite um número de 0 a 10:");
+
+            // Passo 2: Converter para número inteiro
+            numeroJogador = parseInt(numeroJogador);
+
+            // Passo 3: Gerar número aleatório do computador (0 a 10)
+            var numeroComputador = Math.floor(Math.random() * 11);
+
+            // Passo 4: Calcular soma
+            var soma = numeroJogador + numeroComputador;
+
+            // Passo 5: Verificar se é par ou ímpar (usando % que é resto da divisão)
+            var ehPar = (soma % 2 == 0);
+
+            // Passo 6: Pedir escolha do jogador
+            var escolhaJogador = prompt("Escolha: par ou ímpar?");
+
+            // Passo 7: Mostrar resultado
+            var mensagem = "Você: " + numeroJogador + " | Computador: " + numeroComputador + 
+                          "<br>Soma: " + soma + " (" + (ehPar ? "par" : "ímpar") + ")";
+            
+            if ((ehPar && escolhaJogador.toLowerCase() == "par") || 
+                (!ehPar && escolhaJogador.toLowerCase() == "ímpar")) {
+                mensagem += "<br><strong>Você GANHOU!</strong>";
+            } else {
+                mensagem += "<br><strong>Você PERDEU!</strong>";
+            }
+
+            // Passo 8: Mostrar na página
+            document.getElementById("resultado").innerHTML = mensagem;
+        }
+    </script>
+</body>
+</html>

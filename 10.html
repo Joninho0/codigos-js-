@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script type="text/javascript">
+        var nome = prompt("Digite seu nome:");
+        var jogada = prompt("Par ou Ímpar?").toUpperCase();
+        var numero = parseInt(prompt("Digite um número de 0 a 10:"));
+        var machine = Math.floor(Math.random() * 11);
+        var soma = machine + numero;
+        var mach_jog = "";
+        
+        if (jogada == "PAR" && soma % 2 == 0 || jogada == "ÍMPAR" && soma % 2 != 0) {
+            if (soma % 2 == 0) {
+                mach_jog = "PAR";
+            } else {
+                mach_jog = "ÍMPAR";
+            }
+            alert("Parabéns " + nome + "! Você ganhou! A máquina escolheu " + machine + " e a soma é " + soma + " (" + mach_jog + ").");
+        } 
+        else {
+                if (jogada == "PAR") {
+                    mach_jog = "ÍMPAR";
+                } else {
+                    mach_jog = "PAR";
+                }
+            alert("Que pena " + nome + ". Você perdeu! A máquina escolheu " + machine + " e a soma é " + soma + " (" + mach_jog + ").");
+        }
+    </script>
+</body>
+</html>

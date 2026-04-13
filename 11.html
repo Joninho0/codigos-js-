@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+    
+<body>
+    <h2>calcular media do aluno</h2><br>
+    <label> nome: </label><br>
+    <input type="text" id="nome" placeholder="digite seu nome:"><br>
+    <label> nota 1: </label><br>
+    <input type="number" id="nota1" placeholder="digite a primeira nota:"><br>
+    <label> nota 2: </label><br>
+    <input type="number" id="nota2" placeholder="digite a segunda nota:"><br>
+    <br>
+    <button onclick="calcularmedia()">Calcular Média</button><br>
+    <p id="resultado">aguardando...</p>
+</body>
+    <script>
+        function calcularmedia() {
+        let nome = document.getElementById("nome").value;
+        let nota1 = parseFloat(document.getElementById("nota1").value);
+        let nota2 = parseFloat(document.getElementById("nota2").value);
+        
+        if(isNaN(nota1) || isNaN(nota2) || nome === "") {
+            document.getElementById("resultado").innerText = "Por favor, preencha todos os campos corretamente.";
+            return; 
+        }  
+       let media = (nota1 + nota2) / 2;
+       let situacao = media >= 6? "Aprovado" : "Reprovado";    
+       
+        document.getElementById("resultado").innerText =
+         `${nome} | média: ${media.toFixed(2)} | situação: ${situacao}`;
+        }
+    </script>
+</html>
