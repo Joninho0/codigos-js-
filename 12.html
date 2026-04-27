@@ -20,6 +20,13 @@
         alert(frutas.length); // Exibe o número de elementos no array
         alert(frutas.indexOf("Laranja")); // Acessa o índice do elemento "Laranja" no array
         alert(frutas.includes("Maçã")); // Verifica se o elemento "Maçã" está presente no array 
+        frutas.splice(1, 1); // Remove o elemento no índice 1 do array
+        alert(frutas); // Exibe o array atualizado
+        frutas.sort(); // Ordena os elementos do array em ordem alfabética
+        alert(frutas); // Exibe o array ordenado    
+        frutas.slice(1, 2); // Cria um novo array com os elementos do índice 1 ao índice 2 (exclusivo)
+        alert(frutas); // Exibe o array original (sem alterações)
+        
     </script>
 </body>
 </html>
