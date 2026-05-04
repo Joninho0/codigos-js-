@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedra Papel Tesoura</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        input, select, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #resultado {
+            background-color: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            min-height: 100px;
+            display: none;
+        }
+        .vitoria {
+            color: green;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .derrota {
+            color: red;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .empate {
+            color: orange;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .info-resultado {
+            color: #333;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎮 Pedra, Papel ou Tesoura</h1>
+    
+    <div>
+        <label for="nome">Nome do Jogador:</label>
+        <input type="text" id="nome" placeholder="Digite seu nome">
+    </div>
+    
+    <div>
+        <label for="escolha">Sua Escolha:</label>
+        <br>
+        <select id="escolha">
+            <option value="">Selecione uma opção</option>
+            <option value="pedra">🪨 Pedra</option>
+            <option value="papel">📄 Papel</option>
+            <option value="tesoura">✂️ Tesoura</option>
+        </select>
+    </div>
+    
+    <button onclick="jogar()">Jogar</button>
+    
+    <div id="resultado"></div>
+    
+    <script>
+        function jogar() {
+            var nome = document.getElementById("nome").value;
+            var escolhaJogador = document.getElementById("escolha").value;
+            var resultado = document.getElementById("resultado");
+
+            // Validar entrada
+            if (nome === "") {
+                alert("Por favor, digite seu nome!");
+                return;
+            }
+            if (escolhaJogador === "") {
+                alert("Por favor, selecione uma opção!");
+                return;
+            }
+
+            // Computador faz uma escolha aleatória
+            var opcoes = ["pedra", "papel", "tesoura"];
+            var escolhaComputador = opcoes[Math.floor(Math.random() * 3)];
+
+            // Mapear para emojis
+            var emojis = {
+                "pedra": "🪨",
+                "papel": "📄",
+                "tesoura": "✂️"
+            };
+
+            // Determinar resultado
+            var statusResultado = "";
+            var mensagem = "";
+
+            if (escolhaJogador === escolhaComputador) {
+                statusResultado = "empate";
+                mensagem = "EMPATE! 🤝";
+            } else if (
+                (escolhaJogador === "pedra" && escolhaComputador === "tesoura") ||
+                (escolhaJogador === "papel" && escolhaComputador === "pedra") ||
+                (escolhaJogador === "tesoura" && escolhaComputador === "papel")
+            ) {
+                statusResultado = "vitoria";
+                mensagem = "VOCÊ GANHOU! ✅";
+            } else {
+                statusResultado = "derrota";
+                mensagem = "VOCÊ PERDEU! ❌";
+            }
+
+            // Exibir resultado
+            resultado.style.display = "block";
+            resultado.innerHTML = `
+                <div class="info-resultado"><strong>Jogador:</strong> ${nome}</div>
+                <div class="info-resultado"><strong>Sua Escolha:</strong> ${emojis[escolhaJogador]} ${escolhaJogador.charAt(0).toUpperCase() + escolhaJogador.slice(1)}</div>
+                <div class="info-resultado"><strong>Escolha do Computador:</strong> ${emojis[escolhaComputador]} ${escolhaComputador.charAt(0).toUpperCase() + escolhaComputador.slice(1)}</div>
+                <div class="${statusResultado}">${mensagem}</div>
+            `;
+        }
+    </script>
+</body>
+</html>
