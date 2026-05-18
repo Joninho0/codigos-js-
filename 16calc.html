@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Calculadora Roxo & Cinza</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            min-height: 100vh;
+            background: black; /* Fundo preto total */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', 'Poppins', 'Orbitron', monospace;
+            padding: 20px;
+        }
+
+        /* Container principal - calculadora com fundo bege */
+        .calculator {
+            background-color: #d8c9b0;  /* bege suave e elegante */
+            border-radius: 48px;
+            padding: 24px 20px 30px 20px;
+            box-shadow: 0 25px 40px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.3);
+            width: 100%;
+            max-width: 420px;
+            transition: all 0.2s;
+        }
+
+        /* display */
+        .display {
+            background-color: #1e1e1e;
+            border-radius: 28px;
+            padding: 20px 20px;
+            margin-bottom: 28px;
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        #expression {
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: right;
+            font-size: 1.3rem;
+            font-family: 'Segoe UI', monospace;
+            color: #aaa;
+            padding-bottom: 8px;
+            letter-spacing: 0.5px;
+            pointer-events: none;
+            word-wrap: break-word;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        #result {
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: right;
+            font-size: 3rem;
+            font-weight: 600;
+            font-family: 'Orbitron', 'Segoe UI', monospace;
+            color: #f0f0f0;
+            padding-top: 8px;
+            letter-spacing: 2px;
+            pointer-events: none;
+            overflow-x: auto;
+        }
+
+        /* grade de botões */
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        /* estilo base dos botões */
+        button {
+            border: none;
+            border-radius: 60px;
+            padding: 18px 0;
+            font-size: 1.6rem;
+            font-weight: 600;
+            font-family: 'Segoe UI', 'Poppins', monospace;
+            cursor: pointer;
+            transition: 0.1s linear;
+            box-shadow: 0 5px 0 rgba(0, 0, 0, 0.15);
+            background-color: #7f8c8d; /* cinza médio padrão */
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        /* botões numéricos e ponto (cinzas) */
+        .num-btn, .dot-btn {
+            background-color: #6c757d;   /* cinza elegante */
+            color: white;
+        }
+
+        /* botões de função: operadores e AC, DEL, igual vão ser roxo (todos os que não são números nem ponto) */
+        .func-btn {
+            background-color: #9b59b6;   /* roxo vibrante */
+            color: white;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+        }
+
+        /* realces especiais: igual e clear mais escuro roxo */
+        .equal-btn {
+            background-color: #8e44ad;
+            font-size: 1.8rem;
+        }
+
+        .clear-btn {
+            background-color: #a569bd;
+        }
+
+        /* hover leve */
+        button:hover {
+            filter: brightness(1.05);
+        }
+
+        /* responsividade */
+        @media (max-width: 480px) {
+            .buttons {
+                gap: 10px;
+            }
+            button {
+                padding: 14px 0;
+                font-size: 1.4rem;
+            }
+            #result {
+                font-size: 2.5rem;
+            }
+            .calculator {
+                padding: 20px 16px 24px 16px;
+            }
+        }
+
+        /* Footer opcional só pra dar charme */
+        .credit {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 0.7rem;
+            color: #9b8e74;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+<div class="calculator">
+    <div class="display">
+        <div id="expression">0</div>
+        <div id="result">0</div>
+    </div>
+
+    <div class="buttons">
+        <!-- Linha 1 -->
+        <button class="func-btn clear-btn" data-action="clear">AC</button>
+        <button class="func-btn" data-action="delete">DEL</button>
+        <button class="func-btn" data-op="%">%</button>
+        <button class="func-btn" data-op="/">÷</button>
+
+        <!-- Linha 2 -->
+        <button class="num-btn" data-num="7">7</button>
+        <button class="num-btn" data-num="8">8</button>
+        <button class="num-btn" data-num="9">9</button>
+        <button class="func-btn" data-op="*">×</button>
+
+        <!-- Linha 3 -->
+        <button class="num-btn" data-num="4">4</button>
+        <button class="num-btn" data-num="5">5</button>
+        <button class="num-btn" data-num="6">6</button>
+        <button class="func-btn" data-op="-">-</button>
+
+        <!-- Linha 4 -->
+        <button class="num-btn" data-num="1">1</button>
+        <button class="num-btn" data-num="2">2</button>
+        <button class="num-btn" data-num="3">3</button>
+        <button class="func-btn" data-op="+">+</button>
+
+        <!-- Linha 5 -->
+        <button class="num-btn" data-num="0">0</button>
+        <button class="dot-btn num-btn" data-dot=".">.</button>
+        <button class="func-btn equal-btn" data-action="equal">=</button>
+        <button class="func-btn" data-op="^">^</button>  <!-- Potência como função roxa -->
+    </div>
+    <div class="credit">calc · roxo | cinza</div>
+</div>
+
+<script>
+    // Elementos do display
+    const expressionDiv = document.getElementById('expression');
+    const resultDiv = document.getElementById('result');
+
+    // Estado atual
+    let currentExpression = "";   // expressão matemática em string
+    let lastResult = null;
+    let justEvaluated = false;     // indica se acabamos de calcular '=' para substituir próximo número
+
+    // Atualiza a interface
+    function updateDisplay() {
+        // Se não há expressão, mostrar 0
+        if (currentExpression === "") {
+            expressionDiv.innerText = "0";
+        } else {
+            expressionDiv.innerText = currentExpression;
+        }
+
+        // Avaliar e mostrar resultado em tempo real (exceto quando há erro)
+        try {
+            // Avalia a expressão atual com segurança
+            let evalResult = evaluateExpression(currentExpression);
+            // Formata resultado para evitar muitas casas decimais
+            if (evalResult !== undefined && !isNaN(evalResult) && isFinite(evalResult)) {
+                let formatted = formatResult(evalResult);
+                resultDiv.innerText = formatted;
+            } else {
+                if(currentExpression !== "" && !isExpressionValid(currentExpression)) {
+                    resultDiv.innerText = "Erro";
+                } else {
+                    resultDiv.innerText = "0";
+                }
+            }
+        } catch (e) {
+            if(currentExpression !== "") {
+                resultDiv.innerText = "Inválido";
+            } else {
+                resultDiv.innerText = "0";
+            }
+        }
+    }
+
+    // Função de avaliação matemática segura (permite + - * / % ^)
+    function evaluateExpression(expr) {
+        if (!expr || expr.trim() === "") return 0;
+        // Substitui simbolos visuais por operadores JS
+        let jsExpr = expr.replace(/×/g, '*').replace(/÷/g, '/').replace(/\^/g, '**');
+        // Remove caracteres perigosos, permitir números, operadores, ., espaços e parênteses básicos
+        // Mas vamos construir usando Function com cuidado: validar caracteres permitidos
+        if (!/^[\d\s\+\-\*\/\%\.\(\)\*\*]+$/.test(jsExpr.replace(/\*\*/g, '^'))) {
+            // Se tiver caractere estranho, rejeitar
+            throw new Error("Expressão inválida");
+        }
+        // Substitui novamente porque usamos ** para potência
+        jsExpr = jsExpr.replace(/\^/g, '**');   // garantir
+        // Avaliar usando Function (mais seguro que eval direto)
+        const fn = new Function('return (' + jsExpr + ')');
+        let result = fn();
+        if (isNaN(result) || !isFinite(result)) throw new Error("Math error");
+        return result;
+    }
+
+    // Validar se expressão está minimamente ok para mostrar preview
+    function isExpressionValid(expr) {
+        try {
+            let val = evaluateExpression(expr);
+            return !isNaN(val) && isFinite(val);
+        } catch(e) {
+            return false;
+        }
+    }
+
+    function formatResult(num) {
+        // Se for número inteiro, mostrar sem decimais
+        if (Number.isInteger(num)) return num.toString();
+        // Limitar casas decimais
+        let rounded = parseFloat(num.toFixed(8));
+        return rounded.toString();
+    }
+
+    // Adicionar número ou ponto
+    function addNumber(value) {
+        // Se acabamos de calcular '=', limpar a expressão e começar nova
+        if (justEvaluated) {
+            currentExpression = "";
+            justEvaluated = false;
+        }
+
+        // Caso especial ponto flutuante
+        if (value === '.') {
+            // pegar último token (número atual)
+            let lastToken = getLastNumberToken();
+            if (lastToken.includes('.')) {
+                // já tem ponto decimal, não adicionar outro
+                return;
+            }
+            if (currentExpression === "" || isLastCharOperator() || currentExpression.endsWith('(')) {
+                currentExpression += "0.";
+                updateDisplay();
+                return;
+            }
+            currentExpression += ".";
+            updateDisplay();
+            return;
+        }
+
+        // Números normais
+        if (currentExpression === "0" && !justEvaluated) {
+            // Se for zero e não recém igual, substitui
+            if (value !== '.') currentExpression = value;
+            else currentExpression = "0.";
+        } else {
+            currentExpression += value;
+        }
+        updateDisplay();
+    }
+
+    // Verifica se o último caractere é operador
+    function isLastCharOperator() {
+        if (currentExpression.length === 0) return false;
+        let last = currentExpression[currentExpression.length - 1];
+        return ['+', '-', '*', '/', '%', '×', '÷', '^', '.'].includes(last);
+    }
+
+    // Obter último número na expressão (para controle de ponto)
+    function getLastNumberToken() {
+        let match = currentExpression.match(/(\d+(?:\.\d+)?)$/);
+        if (match) return match[0];
+        return "";
+    }
+
+    // Adicionar operador (função roxa)
+    function addOperator(op) {
+        if (justEvaluated) {
+            // se tem um último resultado, usar como início da expressão
+            let lastRes = resultDiv.innerText;
+            if (lastRes !== "Erro" && lastRes !== "Inválido" && lastRes !== "0" && !isNaN(parseFloat(lastRes))) {
+                currentExpression = lastRes;
+                justEvaluated = false;
+            } else {
+                currentExpression = "";
+                justEvaluated = false;
+            }
+        }
+
+        if (currentExpression === "") {
+            // se começar com operador, adiciona zero antes (exceto menos)
+            if (op === '-') {
+                currentExpression = "-";
+            } else {
+                currentExpression = "0" + op;
+            }
+            updateDisplay();
+            return;
+        }
+
+        let lastChar = currentExpression[currentExpression.length - 1];
+        // substituir se o último caractere já é operador
+        if (['+', '-', '*', '/', '%', '×', '÷', '^'].includes(lastChar)) {
+            // substitui operador
+            let newOp = '';
+            if (op === '*') newOp = '×';
+            else if (op === '/') newOp = '÷';
+            else newOp = op;
+            currentExpression = currentExpression.slice(0, -1) + newOp;
+        } else {
+            let displayOp = op;
+            if (op === '*') displayOp = '×';
+            else if (op === '/') displayOp = '÷';
+            currentExpression += displayOp;
+        }
+        updateDisplay();
+    }
+
+    // Calcular resultado (ação de igual)
+    function calculateEqual() {
+        if (currentExpression === "") {
+            resultDiv.innerText = "0";
+            return;
+        }
+
+        try {
+            let evalRes = evaluateExpression(currentExpression);
+            if (isNaN(evalRes) || !isFinite(evalRes)) {
+                resultDiv.innerText = "Erro";
+                return;
+            }
+            let formatted = formatResult(evalRes);
+            resultDiv.innerText = formatted;
+            currentExpression = formatted;
+            justEvaluated = true;
+            updateDisplay();
+        } catch (e) {
+            resultDiv.innerText = "Erro";
+            justEvaluated = false;
+        }
+    }
+
+    // Limpar tudo
+    function clearAll() {
+        currentExpression = "";
+        justEvaluated = false;
+        updateDisplay();
+        resultDiv.innerText = "0";
+        expressionDiv.innerText = "0";
+    }
+
+    // Delete último caractere
+    function deleteLast() {
+        if (justEvaluated) {
+            clearAll();
+            return;
+        }
+        if (currentExpression.length > 0) {
+            currentExpression = currentExpression.slice(0, -1);
+        }
+        if (currentExpression === "") {
+            updateDisplay();
+            resultDiv.innerText = "0";
+        } else {
+            updateDisplay();
+        }
+    }
+
+    // Tratar porcentagem especial
+    function applyPercent() {
+        if (justEvaluated) justEvaluated = false;
+        if (currentExpression === "") return;
+
+        try {
+            let value = evaluateExpression(currentExpression);
+            let percentValue = value / 100;
+            currentExpression = percentValue.toString();
+            updateDisplay();
+        } catch(e) {
+            // se não der, ignora
+        }
+    }
+
+    // Eventos combinados
+    function handleButtonClick(button) {
+        if (button.dataset.num !== undefined) {
+            addNumber(button.dataset.num);
+        } 
+        else if (button.dataset.dot !== undefined) {
+            addNumber('.');
+        }
+        else if (button.dataset.op !== undefined) {
+            let op = button.dataset.op;
+            if (op === '%') {
+                applyPercent();
+            } else {
+                addOperator(op);
+            }
+        }
+        else if (button.dataset.action === 'clear') {
+            clearAll();
+        }
+        else if (button.dataset.action === 'delete') {
+            deleteLast();
+        }
+        else if (button.dataset.action === 'equal') {
+            calculateEqual();
+        }
+    }
+
+    // adicionar eventos a todos os botões
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleButtonClick(btn);
+        });
+    });
+
+    // Suporte ao teclado
+    document.addEventListener('keydown', (e) => {
+        const key = e.key;
+        // números e ponto
+        if (/[\d]/.test(key)) {
+            e.preventDefault();
+            addNumber(key);
+        } else if (key === '.') {
+            e.preventDefault();
+            addNumber('.');
+        } else if (key === '+' || key === '-' || key === '*' || key === '/') {
+            e.preventDefault();
+            let op = key;
+            if (key === '*') op = '*';
+            if (key === '/') op = '/';
+            addOperator(op);
+        } else if (key === '%') {
+            e.preventDefault();
+            applyPercent();
+        } else if (key === '^') {
+            e.preventDefault();
+            addOperator('^');
+        } else if (key === 'Enter' || key === '=') {
+            e.preventDefault();
+            calculateEqual();
+        } else if (key === 'Escape' || key === 'c' || key === 'C') {
+            e.preventDefault();
+            clearAll();
+        } else if (key === 'Backspace') {
+            e.preventDefault();
+            deleteLast();
+        }
+    });
+
+    // inicialização
+    clearAll();
+</script>
+</body>
+</html>
